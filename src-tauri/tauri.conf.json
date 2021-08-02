@@ -1,0 +1,82 @@
+{
+  "package": {
+    "productName": "EmailIt",
+    "version": "0.1.0"
+  },
+  "build": {
+    "distDir": "../public",
+    "devPath": "http://localhost:5000",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "withGlobalTauri": true
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.emailit.dev",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": [],
+      "externalBin": [],
+      "copyright": "MIT",
+      "category": "Developer Tool",
+      "shortDescription": "Simple Email Client",
+      "longDescription": "A markdown enabled email client for just sending emails quickly.",
+      "deb": {
+        "depends": [],
+        "useBootstrapper": false
+      },
+      "macOS": {
+        "frameworks": [],
+        "minimumSystemVersion": "",
+        "useBootstrapper": false,
+        "exceptionDomain": "",
+        "signingIdentity": null,
+        "entitlements": null
+      },
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "cli": {
+      "description": "EmailIt is a quick and easy way to send emails.", 
+      "longDescription": "EmailIt is a quick and easy way to send emails.", 
+      "beforeHelp": "EmailIt", 
+      "afterHelp": "By Richard Guay", 
+      "args": [{
+        "short": "m",
+        "name": "emails",
+        "description": "Comma separated list of email addresses.",
+        "takesValue": true
+      }],
+      "subcommands": null
+    },
+    "updater": {
+      "active": false
+    },
+    "allowlist": {
+      "all": true
+    },
+    "windows": [
+      {
+        "title": "EmailIt",
+        "width": 1000,
+        "height": 600,
+        "resizable": false,
+        "fullscreen": false,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
+    }
+  }
+}
