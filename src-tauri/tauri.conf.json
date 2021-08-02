@@ -65,16 +65,6 @@
     "allowlist": {
       "all": true
     },
-    "windows": [
-      {
-        "title": "EmailIt",
-        "width": 1000,
-        "height": 600,
-        "resizable": false,
-        "fullscreen": false,
-        "visible": false
-      }
-    ],
     "security": {
       "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
     }
