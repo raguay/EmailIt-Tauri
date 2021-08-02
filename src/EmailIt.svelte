@@ -522,27 +522,6 @@
     getAccounts();
     state = 'edit';
     oldState = 'edit';
-    /*
-     * Not working and not sure how to fix.
-     *
-    socket = window.io("http://127.0.0.1:9978",{
-      cors: {
-        origin: "*.*",
-        credentials: false
-      }
-    });
-    socket.on("connect", () => {
-      console.log("made connection...");
-      socket.io.on("email", (email) => {
-        console.log(email);
-        if(receiver === null) {
-          document.getElementById('receiverInput').value = email;
-        } else {
-          receiver.value = email;
-        }
-      })
-    });
-    End */
   });
 
   afterUpdate(() => {
