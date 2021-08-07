@@ -1,9 +1,9 @@
-import EmailIt from './EmailIt.svelte';
+import Main from './Main.svelte';
 
-const emailit = new EmailIt({
+const main = new Main({
 	target: document.body,
 	props: {
 	}
 });
 
-export default emailit;
+export default main;

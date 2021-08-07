@@ -1,9 +1,20 @@
-<div id='main' style="background-color: {theme.backgroundColor}; font-family: {theme.font}; color: {theme.textColor}; font-size: {theme.fontSize};">
+<div id='main' style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize};">
   {#if showNewAccount}
     <div
       id="newAccountDialog"
-      style="background-color: {theme.backgroundColor}; color: {theme.textColor};"
+      style="background-color: {$theme.backgroundColor}; color: {$theme.textColor};"
     >
+      <label 
+        for="accountDefaultInput"
+        class='newAccountLabel'
+      >
+        Default:
+      </label>
+      <input 
+        id="accountDefaultInput"
+        type="checkbox"
+        bind:checked={accountDefault}
+      />
       <label 
         for="accountNameInput"
         class='newAccountLabel'
@@ -13,7 +24,7 @@
       <input 
         id="accountNameInput"
         bind:value={accountName}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
       <label 
         for="accountFromInput"
@@ -24,7 +35,7 @@
       <input 
         id="accountFromInput"
         bind:value={accountFrom}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
       <label 
         for="accountSmptServerInput"
@@ -35,7 +46,7 @@
       <input 
         id="accountSmptServerInput"
         bind:value={accountSmptServer}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
       <label 
         for="accountPortInput"
@@ -46,7 +57,7 @@
       <input 
         id="accountPortInput"
         bind:value={accountPort}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
       <label 
         for="accountUsernameInput"
@@ -57,7 +68,7 @@
       <input 
         id="accountUsernameInput"
         bind:value={accountUsername}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
       <label 
         for="accountPasswordInput"
@@ -68,7 +79,7 @@
       <input 
         id="accountPasswordInput"
         bind:value={accountPassword}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
       <label 
         for="accountSigInput"
@@ -79,7 +90,7 @@
       <textarea
         id="accountSigInput"
         bind:value={accountSig}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       ></textarea>
       <label 
         for="accountHeaderHTMLInput"
@@ -90,7 +101,7 @@
       <textarea
         id="accountHeaderHTMLInput"
         bind:value={accountHeaderHTML}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       ></textarea>
       <label 
         for="accountFooterHTMLInput"
@@ -101,7 +112,7 @@
       <textarea
         id="accountFooterHTMLInput"
         bind:value={accountFooterHTML}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       ></textarea>
       <div
         id="buttonrow"
@@ -110,14 +121,14 @@
         <button 
           id="save"
           on:click={saveNewAccount}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           Save
         </button>
         <button 
           id="cancel"
           on:click={cancelNewAccount}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           Cancel
         </button>
@@ -127,18 +138,18 @@
   {#if showChangeAccount}
     <div
       id="accountsDiv"
-      style="background-color: {theme.backgroundColor}; color: {theme.textColor};"
+      style="background-color: {$theme.backgroundColor}; color: {$theme.textColor};"
     >
       <h1>Email It - Change Account</h1>
-      {#if currentAccount !== undefined}
-        <h2>Current Account: {currentAccount.name}</h2>
+      {#if $account !== undefined}
+        <h2>Current Account: {$account.name}</h2>
       {:else}
         <h2>Current Account: Please Create an Account</h2>
       {/if}
       {#each accounts as acc}
         <button
           on:click={() => { changeActiveAccount(acc); }}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           {acc.name}
         </button>
@@ -149,35 +160,35 @@
         <button 
           id="save"
           on:click={saveAccount}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           Save
         </button>
         <button 
           id="new"
           on:click={newAccount}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           New
         </button>
         <button 
           id="edit"
           on:click={editAccountChange}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           Edit
         </button>
         <button 
           id="cancel"
           on:click={cancelAccountChange}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           Cancel
         </button>
         <button 
           id="delete"
           on:click={deleteAccount}
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
         >
           Delete
         </button>
@@ -205,16 +216,19 @@
           inputClassName='receiverInput'
           className='receiverDiv'
           create=true
-          theme={theme}
+          theme={$theme}
+          onChange={(val) => {
+            if(val !== undefined) $email.to = val.email;
+          }}
         />
       {:else}
         <input 
           id='receiverInput' 
-          bind:this={receiver}
+          bind:this={receiverIn}
           type='email'
           multiple
-          style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
-          on:blur={(e)=>{ receiver.checkValidity(); }}
+          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+          on:blur={saveValues}
         />
       {/if}
     </div>
@@ -229,14 +243,15 @@
       <input
         id='subject'
         bind:this={subject}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        on:blur={saveValues}
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
     </div>
   </div>
   {#if showPreview}
     <div 
       id='preview'
-      style="border-color: {theme.textColor};"
+      style="border-color: {$theme.textColor};"
     >
       {@html previewHTML}
     </div>
@@ -244,17 +259,24 @@
     <textarea
       id='body'
       bind:this={emailbody}
-      style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+      on:blur={saveValues}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     ></textarea>
   {/if}
   <div
     id='buttonrow'
   >
-    {#if state === 'edit'}
+    <button 
+      on:click={viewNotes}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Notes
+    </button>
+    {#if emailState === 'edit'}
       <button 
         id="showPreview"
         on:click={createPreview}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       >
         Preview
       </button>
@@ -262,23 +284,23 @@
       <button 
         id="edit"
         on:click={editEmail}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       >
         Edit
       </button>
       <button 
         id="send"
         on:click={sendEmail}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       >
         Send
       </button>
     {/if}
-    {#if (currentAccount === undefined)}
+    {#if ($account === undefined)}
       <button
         id="account"
         on:click={newAccount}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       >
         Create a New Account
       </button>
@@ -286,22 +308,22 @@
       <button
         id="account"
         on:click={changeAccount}
-        style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       >
-        {currentAccount.name}
+        {$account.name}
       </button>
     {/if}
     <button 
       id="clear"
       on:click={clearEmail}
-      style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     >
       Clear
     </button>
     <button 
       id="cancel"
       on:click={cancelEmail}
-      style="background-color: {theme.textAreaColor}; color: {theme.textColor}; border-color: {theme.borderColor};"
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     >
       Close
     </button>
@@ -467,15 +489,19 @@
   import { exit } from "@tauri-apps/api/process";
   import { getMatches } from "@tauri-apps/api/cli";
   import { appWindow } from "@tauri-apps/api/window";
-  import SimpleAutoComplete from "./components/SimpleAutocomplete.svelte";
+  import SimpleAutoComplete from "../components/SimpleAutocomplete.svelte";
   import showdown from 'showdown';
+  import { theme } from '../stores/theme.js';
+  import { state } from '../stores/state.js';
+  import { account } from '../stores/account.js';
+  import { email } from '../stores/email.js';
 
-  let receiver = '';
-  let subject = '';
-  let emailbody = '';
-  let state = 'edit';
+  let receiver = undefined;
+  let receiverIn = undefined;
+  let subject = undefined;
+  let emailbody = undefined;
+  let emailState = 'edit';
   let accounts;
-  let currentAccount;
   let showChangeAccount = false;
   let showNewAccount = false;
   let showPreview = false;
@@ -489,59 +515,63 @@
   let accountSig = '';
   let accountHeaderHTML = '';
   let accountFooterHTML = '';
+  let accountDefault = false;
   let previewHTML = '';
   let bodyValue = '';
   let oldState = '';
   let starting = true;
   let emails = undefined;
-  let theme = {
-    font: "Fira Code, Menlo",
-    fontSize: "16pt",
-    textAreaColor: '#454158',
-    backgroundColor: '#22212C',
-    textColor: '#80ffea',
-    borderColor: '#1B1A23',
-    Cyan: "#80FFEA",
-    Green: "#8AFF80",
-    Orange: "#FFCA80",
-    Pink: "#FF80BF",
-    Purple: "#9580FF",
-    Red: "#FF9580",
-    Yellow: "#FFFF80"
-  };
-  let socket;
-  let commandLineEmail;
+  let commandLineEmail = undefined;
 
   onMount(()=>{
     getEmails();
     getMatches().then((matches) => {
-      if(typeof matches.args.emails.value !== 'undefined') {
+      if((typeof matches.args.emails.value !== 'undefined')&&(matches.args.emails.value)) {
         commandLineEmail = matches.args.emails.value;
       }
     });
     getAccounts();
-    state = 'edit';
+    emailState = 'edit';
     oldState = 'edit';
+    if($email.body !== '') {
+      bodyValue = $email.body;
+    }
   });
 
   afterUpdate(() => {
-    if((state === 'edit')&&(oldState === 'preview')) {
+    if(starting) {
+      if($email.body !== undefined) {
+        receiver = {
+          name: '',
+          email: $email.to 
+        };
+        body.value = $email.body;
+        subject.value = $email.subject;
+      }
+      starting = false;
+      appWindow.isVisible()
+        .then(visible => {
+          if(!visible) appWindow.show();
+        });
+    }
+    if((emailState === 'edit')&&(oldState === 'preview')) {
       emailbody.value = bodyValue;
       oldState = 'edit';
     }
-    if(starting) {
-      starting = false;
-      appWindow.show();
-    }
-    if((typeof commandLineEmail !== 'undefined')&&(typeof emails !== 'undefined')) {
-      if(receiver === null) {
-        document.getElementById('receiverInput').value = commandLineEmail;
-      } else {
-        receiver.value = commandLineEmail;
-      }
+    if(commandLineEmail !== undefined) {
+      receiver = {
+        name: '',
+        email: commandLineEmail
+      };
+      $email.to = commandLineEmail;
       commandLineEmail = undefined;
-    }
+    } 
   });
+
+  function saveValues() {
+    $email.body = body.value;
+    $email.subject = subject.value;
+  }
 
   function getEmails(callback) {
     // 
@@ -562,12 +592,12 @@
   }
 
   function changeAccount() {
-    origAccount = currentAccount;
+    origAccount = $account;
     showChangeAccount = true;
   }
 
   function saveAccount() {
-    if(state === 'preview') {
+    if(emailState === 'preview') {
       makeHtml();
     }
     showChangeAccount = false;
@@ -575,6 +605,7 @@
 
   function clearFormData() {
     accountName = '';
+    accountDefault = false;
     accountFrom = '';
     accountUsername = '';
     accountSmptServer = '';
@@ -591,8 +622,8 @@
   }
 
   function cancelAccountChange() {
-    currentAccount = origAccount;
-    if(state === 'edit') {
+    $account = origAccount;
+    if(emailState === 'edit') {
       bodyValue = emailbody.value;
     } else {
       makeHtml();
@@ -614,7 +645,9 @@
       })
       .then(accs => {
         accounts = accs;
-        if(accounts.length > 0) currentAccount = accounts[0];
+        if((accounts.length > 0)&&($account === undefined)) {
+          $account = accounts.find(item => item.default);
+        }
         if(typeof callback !== 'undefined') callback();
       });
   }
@@ -623,8 +656,8 @@
     //
     // Set new account and create previews.
     //
-    currentAccount = acc;
-    if(state === 'edit') {
+    $account = acc;
+    if(emailState === 'edit') {
       bodyValue = emailbody.value;
     } else {
       makeHtml();
@@ -632,26 +665,44 @@
   }
 
   function createPreview() {
-    // 
-    // Keep a copy of the body value for when we exit preview mode.
-    //
-    bodyValue = emailbody.value;
+    var toAddress;
+    if(receiverIn === undefined) {
+      receiver = document.getElementById('receiverInput').value;
+      toAddress = receiver;
+    } else if(emails === undefined) {
+      toAddress = receiver.value;
+    } else {
+      if(typeof receiver.email === 'undefined') {
+        toAddress = $email.to;
+      } else {
+        toAddress = receiver.email;
+      }
+    }
+    if(validate(toAddress)) {
+   
+      // 
+      // Keep a copy of the body value for when we exit preview mode.
+      //
+      bodyValue = emailbody.value;
 
-    // 
-    // Set to preview and keep a copy of the new state.
-    // 
-    state = 'preview';
-    oldState = state;
+      // 
+      // Set to preview and keep a copy of the new state.
+      // 
+      emailState = 'preview';
+      oldState = emailState;
 
-    // 
-    // Creat a preview of the email.
-    //
-    makeHtml();
+      // 
+      // Creat a preview of the email.
+      //
+      makeHtml();
 
-    //
-    // Show the preview.
-    // 
-    showPreview = true;
+      //
+      // Show the preview.
+      // 
+      showPreview = true;
+    } else {
+      alert("Invalid Email");
+    }
   }
 
   function makeHtml() {
@@ -660,14 +711,14 @@
       ],
     });
     converter.setOption('tables',true);
-    previewHTML = converter.makeHtml(bodyValue + currentAccount.signiture);
-    if(typeof currentAccount.headerHTML !== 'undefined') {
-      previewHTML = currentAccount.headerHTML + previewHTML + currentAccount.footerHTML;
+    previewHTML = converter.makeHtml(bodyValue + $account.signiture);
+    if(typeof $account.headerHTML !== 'undefined') {
+      previewHTML = $account.headerHTML + previewHTML + $account.footerHTML;
     }
   }
 
   async function editEmail() {
-    state = 'edit';
+    emailState = 'edit';
     showPreview = false;
   }
 
@@ -679,37 +730,52 @@
     // 
     // This will tell the server to send the email.
     //
-    var bodyText = bodyValue + cleanTags(currentAccount.signiture);
-    showPreview = false;
-    state = 'edit';
     var toAddress;
-    if(receiver === null) {
+    var rawAddress;
+    if(receiverIn === undefined) {
       receiver = document.getElementById('receiverInput').value;
       toAddress = receiver;
+      rawAddress = receiver;
       addToEmails('', receiver);
     } else if(emails === undefined) {
       toAddress = receiver.value;
+      rawAddress = receiver.value;
       addToEmails('', receiver.value);
     } else {
       toAddress = `${receiver.name} <${receiver.email}>`;
+      rawAddress = receiver.email;
       addToEmails(receiver.name, receiver.email)
     }
 
-    console.log(receiver);
-        fetch('http://localhost:9978/api/emailit/send', {
+    if(validate(rawAddress)) {
+      var bodyText = bodyValue + cleanTags($account.signiture);
+      showPreview = false;
+      emailState = 'edit';
+      fetch('http://localhost:9978/api/emailit/send', {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json'
         },
         body: Body.json({
-          acc: currentAccount,
+          acc: $account,
           to: toAddress,
-          from: currentAccount.from,
+          from: $account.from,
           subject: subject.value,
           text: bodyText,
           html: previewHTML
         })
       });
+    } else {
+      alert('Invalid Email');
+    }
+  }
+
+  function validate(email) {
+    const emailRegexp = new RegExp(
+      /^[a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1}([a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1})*[a-zA-Z0-9]@[a-zA-Z0-9][-\.]{0,1}([a-zA-Z][-\.]{0,1})*[a-zA-Z0-9]\.[a-zA-Z0-9]{1,}([\.\-]{0,1}[a-zA-Z]){0,}[a-zA-Z0-9]{0,}$/i
+    );
+
+    return emailRegexp.test(email);
   }
 
   function addToEmails(name, email) {
@@ -741,9 +807,8 @@
   }
 
   function clearEmail() {
-    if(receiver === null) {
-      receiver = document.getElementById('receiverInput').value;
-      receiver.value = '';
+    if(receiver === undefined) {
+      document.getElementById('receiverInput').value = '';
     } else if(emails === undefined) {
       receiver.value = '';
     } else {
@@ -752,14 +817,18 @@
     subject.value = '';
     emailbody.value = '';
     bodyValue = '';
+    $email.to = '';
+    $email.subject = '';
+    $email.body = '';
     showPreview = false;
-    state = 'edit';
+    emailState = 'edit';
     oldState = 'edit';
   }
 
   function saveNewAccount() {
     var acc = {
       name: accountName,
+      default: accountDefault,
       from: accountFrom,
       username: accountUsername,
       smtpserver: accountSmptServer,
@@ -770,28 +839,39 @@
       footerHTML: accountFooterHTML
     };
     saveNewAccountServer(acc);
+
+    //
+    // If this is to be the default account, make sure all the others 
+    // are false.
+    //
+    if(accountDefault) {
+      accounts = accounts.map(item => {
+        item.default = false;
+        return(item);
+      });
+    }
     var orig = accounts.filter(item => item.name === acc.name);
     if(orig.length > 0) {
       accounts = accounts.filter(item => item.name !== acc.name);
       accounts.push(acc);
     }
-    currentAccount = acc;
+    $account = acc;
     accounts = accounts;
-    if(state === 'preview') makeHtml();
+    if(emailState === 'preview') makeHtml();
     clearFormData();
     showNewAccount = false;
   }
 
   function deleteAccount() {
-    var acc = currentAccount;
+    var acc = $account;
     accounts = accounts.filter(item => item.name !== acc.name);
     if(accounts.length > 0) {
-      currentAccount = accounts[0];
+      $account = accounts[0];
       origAccount = accounts[0];
-      if(state === 'preview') makeHtml();
+      if(emailState === 'preview') makeHtml();
     } else {
       showNewAccount = false;
-      currentAccount = undefined;
+      $account = undefined;
       origAccount = undefined;
     }
     deleteAccountServer(acc);
@@ -829,16 +909,21 @@
   }
 
   function editAccountChange() {
-    accountName = currentAccount.name;
-    accountFrom = currentAccount.from;
-    accountUsername = currentAccount.username;
-    accountSmptServer = currentAccount.smtpserver;
-    accountPassword = currentAccount.password;
-    accountPort = currentAccount.port;
-    accountSig = currentAccount.signiture;
-    accountHeaderHTML = currentAccount.headerHTML;
-    accountFooterHTML = currentAccount.footerHTML;
+    accountName = $account.name;
+    accountDefault = $account.default;
+    accountFrom = $account.from;
+    accountUsername = $account.username;
+    accountSmptServer = $account.smtpserver;
+    accountPassword = $account.password;
+    accountPort = $account.port;
+    accountSig = $account.signiture;
+    accountHeaderHTML = $account.headerHTML;
+    accountFooterHTML = $account.footerHTML;
     showNewAccount = true;
+  }
+
+  function viewNotes() {
+    state.set('notes');
   }
 </script>
 
