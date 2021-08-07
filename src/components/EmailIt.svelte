@@ -672,8 +672,14 @@
     } else if(emails === undefined) {
       toAddress = receiver.value;
     } else {
-      if(typeof receiver.email === 'undefined') {
-        toAddress = $email.to;
+      if((typeof receiver === 'undefined') || (typeof receiver.email === 'undefined')) {
+        if(typeof $email.to !== 'undefined') {
+          toAddress = $email.to;
+        } else {
+          var em = document.getElementById('receiverInput').value;
+          toAddress = em;
+          console.log(em);
+        }
       } else {
         toAddress = receiver.email;
       }
@@ -731,23 +737,25 @@
     // This will tell the server to send the email.
     //
     var toAddress;
-    var rawAddress;
     if(receiverIn === undefined) {
       receiver = document.getElementById('receiverInput').value;
       toAddress = receiver;
-      rawAddress = receiver;
-      addToEmails('', receiver);
     } else if(emails === undefined) {
       toAddress = receiver.value;
-      rawAddress = receiver.value;
-      addToEmails('', receiver.value);
     } else {
-      toAddress = `${receiver.name} <${receiver.email}>`;
-      rawAddress = receiver.email;
-      addToEmails(receiver.name, receiver.email)
+      if((typeof receiver === 'undefined') || (typeof receiver.email === 'undefined')) {
+        if(typeof $email.to !== 'undefined') {
+          toAddress = $email.to;
+        } else {
+          var em = document.getElementById('receiverInput').value;
+          toAddress = em;
+        }
+      } else {
+        toAddress = receiver.email;
+      }
     }
-
-    if(validate(rawAddress)) {
+    if(validate(toAddress)) {
+      addToEmails('',toAddress);
       var bodyText = bodyValue + cleanTags($account.signiture);
       showPreview = false;
       emailState = 'edit';
