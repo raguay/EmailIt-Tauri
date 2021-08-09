@@ -207,30 +207,19 @@
       >
         To:
       </label>
-      {#if emails !== undefined}
-        <SimpleAutoComplete 
-          inputId="receiverInput"
-          items={emails} 
-          labelFieldName="email"
-          bind:selectedItem={receiver}
-          inputClassName='receiverInput'
-          className='receiverDiv'
-          create=true
-          theme={$theme}
-          onChange={(val) => {
-            if(val !== undefined) $email.to = val.email;
-          }}
-        />
-      {:else}
-        <input 
-          id='receiverInput' 
-          bind:this={receiverIn}
-          type='email'
-          multiple
-          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
-          on:blur={saveValues}
-        />
-      {/if}
+      <SimpleAutoComplete 
+        inputId="receiverInput"
+        items={emails} 
+        labelFieldName="email"
+        bind:selectedItem={receiver}
+        inputClassName='receiverInput'
+        className='receiverDiv'
+        create=true
+        theme={$theme}
+        onBlur={(val) => {
+          $email.to = val.value;
+        }}
+      />
     </div>
     <div
       class='headerRow'
@@ -243,7 +232,7 @@
       <input
         id='subject'
         bind:this={subject}
-        on:blur={saveValues}
+        on:blur={saveEmailState}
         style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
     </div>
@@ -259,7 +248,7 @@
     <textarea
       id='body'
       bind:this={emailbody}
-      on:blur={saveValues}
+      on:blur={saveEmailState}
       style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     ></textarea>
   {/if}
@@ -487,7 +476,6 @@
   import { afterUpdate, onMount } from 'svelte';
   import { fetch, Body } from "@tauri-apps/api/http";
   import { exit } from "@tauri-apps/api/process";
-  import { getMatches } from "@tauri-apps/api/cli";
   import { appWindow } from "@tauri-apps/api/window";
   import SimpleAutoComplete from "../components/SimpleAutocomplete.svelte";
   import showdown from 'showdown';
@@ -495,11 +483,14 @@
   import { state } from '../stores/state.js';
   import { account } from '../stores/account.js';
   import { email } from '../stores/email.js';
+  import { commandLineEmail } from '../stores/commandLineEmail.js'
 
-  let receiver = undefined;
-  let receiverIn = undefined;
-  let subject = undefined;
-  let emailbody = undefined;
+  let receiver = {
+      name: '',
+      email: ''
+    };
+  let subject = '';
+  let emailbody = '';
   let emailState = 'edit';
   let accounts;
   let showChangeAccount = false;
@@ -520,58 +511,40 @@
   let bodyValue = '';
   let oldState = '';
   let starting = true;
-  let emails = undefined;
-  let commandLineEmail = undefined;
+  let emails = [];
 
   onMount(()=>{
     getEmails();
-    getMatches().then((matches) => {
-      if((typeof matches.args.emails.value !== 'undefined')&&(matches.args.emails.value)) {
-        commandLineEmail = matches.args.emails.value;
-      }
-    });
     getAccounts();
     emailState = 'edit';
     oldState = 'edit';
-    if($email.body !== '') {
-      bodyValue = $email.body;
-    }
   });
 
   afterUpdate(() => {
+    if(($commandLineEmail !== undefined)&&($commandLineEmail !== '')) {
+      receiver = {
+        name: '',
+        email: $commandLineEmail
+      };
+      $email.to = $commandLineEmail;
+      $commandLineEmail = undefined;
+    } 
     if(starting) {
-      if($email.body !== undefined) {
-        receiver = {
-          name: '',
-          email: $email.to 
-        };
-        body.value = $email.body;
-        subject.value = $email.subject;
-      }
+      receiver = {
+        name: '',
+        email: $email.to 
+      };
+      var rec = document.getElementById('receiverInput');
+      rec.value = $email.to;
+      body.value = $email.body;
+      subject.value = $email.subject;
       starting = false;
-      appWindow.isVisible()
-        .then(visible => {
-          if(!visible) appWindow.show();
-        });
     }
     if((emailState === 'edit')&&(oldState === 'preview')) {
       emailbody.value = bodyValue;
       oldState = 'edit';
     }
-    if(commandLineEmail !== undefined) {
-      receiver = {
-        name: '',
-        email: commandLineEmail
-      };
-      $email.to = commandLineEmail;
-      commandLineEmail = undefined;
-    } 
   });
-
-  function saveValues() {
-    $email.body = body.value;
-    $email.subject = subject.value;
-  }
 
   function getEmails(callback) {
     // 
@@ -666,23 +639,11 @@
 
   function createPreview() {
     var toAddress;
-    if(receiverIn === undefined) {
-      receiver = document.getElementById('receiverInput').value;
-      toAddress = receiver;
-    } else if(emails === undefined) {
-      toAddress = receiver.value;
+    if(typeof $email.to !== 'undefined') {
+      toAddress = $email.to;
     } else {
-      if((typeof receiver === 'undefined') || (typeof receiver.email === 'undefined')) {
-        if(typeof $email.to !== 'undefined') {
-          toAddress = $email.to;
-        } else {
-          var em = document.getElementById('receiverInput').value;
-          toAddress = em;
-          console.log(em);
-        }
-      } else {
-        toAddress = receiver.email;
-      }
+      var em = document.getElementById('receiverInput').value;
+      toAddress = em;
     }
     if(validate(toAddress)) {
    
@@ -737,22 +698,11 @@
     // This will tell the server to send the email.
     //
     var toAddress;
-    if(receiverIn === undefined) {
-      receiver = document.getElementById('receiverInput').value;
-      toAddress = receiver;
-    } else if(emails === undefined) {
-      toAddress = receiver.value;
+    if(typeof $email.to !== 'undefined') {
+      toAddress = $email.to;
     } else {
-      if((typeof receiver === 'undefined') || (typeof receiver.email === 'undefined')) {
-        if(typeof $email.to !== 'undefined') {
-          toAddress = $email.to;
-        } else {
-          var em = document.getElementById('receiverInput').value;
-          toAddress = em;
-        }
-      } else {
-        toAddress = receiver.email;
-      }
+      var em = document.getElementById('receiverInput').value;
+      toAddress = em;
     }
     if(validate(toAddress)) {
       addToEmails('',toAddress);
@@ -815,13 +765,10 @@
   }
 
   function clearEmail() {
-    if(receiver === undefined) {
-      document.getElementById('receiverInput').value = '';
-    } else if(emails === undefined) {
-      receiver.value = '';
-    } else {
-      receiver = '';
-    }
+    receiver = {
+      name: '',
+      email: ''
+    };
     subject.value = '';
     emailbody.value = '';
     bodyValue = '';
@@ -931,7 +878,15 @@
   }
 
   function viewNotes() {
+    saveEmailState();
     state.set('notes');
+  }
+
+  function saveEmailState() {
+    var rec = document.getElementById('receiverInput');
+    $email.to = rec.value;
+    $email.body = body.value;
+    $email.subject = subject.value;
   }
 </script>
 
