@@ -9,15 +9,21 @@
 {:else if $state === 'notes'}
   <Notes />
 {/if}
+<ScriptMenu 
+/>
 
 <script>
   import { onMount, afterUpdate } from 'svelte';
   import { getMatches } from "@tauri-apps/api/cli";
   import { appWindow } from "@tauri-apps/api/window";
+  import { fetch, Body } from "@tauri-apps/api/http";
   import EmailIt from './components/EmailIt.svelte';
   import ViewLog from './components/ViewLog.svelte';
   import Notes from './components/Notes.svelte';
+  import ScriptMenu from './components/ScriptMenu.svelte';
   import { state } from './stores/state.js';
+  import { scripts } from './stores/scripts.js';
+  import { showScripts } from './stores/showScripts.js';
   import { commandLineEmail } from './stores/commandLineEmail.js';
 
   let starting = true;
@@ -28,6 +34,7 @@
         $commandLineEmail = matches.args.emails.value;
       }
     });
+    getScriptsList();
   });
 
   afterUpdate(() => {
@@ -39,6 +46,21 @@
       starting = false;
     }
   });
+
+  function getScriptsList() {
+    fetch('http://localhost:9978/api/scripts/list', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json'
+        }
+      }).then(resp => {
+        return resp.data;
+      })
+      .then(data => {
+        $scripts = data.data;
+        if(typeof callback !== 'undefined') callback();
+      });
+  }
 
   function keyDownProcessor(e) {
     if(e.ctrlKey) {
@@ -55,6 +77,11 @@
 
         case 'n':
           state.set('notes');
+          e.preventDefault();
+        break;
+
+        case 'm':
+          $showScripts = !$showScripts;
           e.preventDefault();
         break;
       }

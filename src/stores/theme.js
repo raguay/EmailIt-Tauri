@@ -13,7 +13,17 @@ let defaultTheme = {
   Pink: "#FF80BF",
   Purple: "#9580FF",
   Red: "#FF9580",
-  Yellow: "#FFFF80"
+  Yellow: "#FFFF80",
+  Circle0: '#80FFEA',
+  Circle1: '#8AFF80',
+  Circle2: '#FFCA80',
+  Circle3: '#FF80BF',
+  Circle4: '#9580FF',
+  Circle5: '#FF9580',
+  Circle6: 'blue',
+  Circle7: 'green',
+  Circle8: 'red',
+  Circle9: 'purple',
 };
 
 export const theme = writable( defaultTheme );

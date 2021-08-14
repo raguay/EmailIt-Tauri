@@ -16,92 +16,92 @@
       id="noteButtons"
     >
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 0 ? 'selectedButton' : ''}"
         on:click={() => {
           openNote(0); 
         }}
-        style="height: {$currentNote === 0 ? '50px' : '45px'}; width: {$currentNote === 0 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle0};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 1 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(1); 
         }}
-        style="height: {$currentNote === 1 ? '50px' : '45px'}; width: {$currentNote === 1 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle1};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 2 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(2); 
         }}
-        style="height: {$currentNote === 2 ? '50px' : '45px'}; width: {$currentNote === 2 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle2};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 3 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(3); 
         }}
-        style="height: {$currentNote === 3 ? '50px' : '45px'}; width: {$currentNote === 3 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle3};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 4 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(4); 
         }}
-        style="height: {$currentNote === 4 ? '50px' : '45px'}; width: {$currentNote === 4 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle4};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 5 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(5); 
         }}
-        style="height: {$currentNote === 5 ? '50px' : '45px'}; width: {$currentNote === 5 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle5};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 6 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(6); 
         }}
-        style="height: {$currentNote === 6 ? '50px' : '45px'}; width: {$currentNote === 6 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle6};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 7 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(7); 
         }}
-        style="height: {$currentNote === 7 ? '50px' : '45px'}; width: {$currentNote === 7 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle7};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 8 ? 'selectedButton' : ''}"
         on:click={() => { 
           storeCurrentCursor();
           openNote(8); 
         }}
-        style="height: {$currentNote === 8 ? '50px' : '45px'}; width: {$currentNote === 8 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle8};"
       >
       </div>
       <div 
-        class='noteButton'
+        class="noteButton {$currentNote === 9 ? 'selectedButton' : ''}"
         on:click= {() => { 
           storeCurrentCursor();
           openNote(9); 
         }}
-        style="height: {$currentNote === 9 ? '50px' : '45px'}; width: {$currentNote === 9 ? '50px' : '45px'};"
+        style="background-color: {$theme.Circle9};"
       >
       </div>
     </div>
@@ -168,13 +168,16 @@
   }
 
   .noteButton {
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
     margin: auto;
     padding: 0px;
     border-radius: 50px;
     border: solid 2px transparent;
-    background-color: blue;
+  }
+
+  .selectedButton {
+    box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.6);
   }
 </style> 
 

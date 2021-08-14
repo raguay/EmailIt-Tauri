@@ -216,8 +216,8 @@
         className='receiverDiv'
         create=true
         theme={$theme}
-        onBlur={(val) => {
-          $email.to = val.value;
+        onBlur={val => {
+          $email.to = receiver.value;
         }}
       />
     </div>
@@ -245,12 +245,15 @@
       {@html previewHTML}
     </div>
   {:else}
-    <textarea
-      id='body'
-      bind:this={emailbody}
-      on:blur={saveEmailState}
-      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
-    ></textarea>
+    <CodeMirror 
+      height='290px' 
+      width='958px' 
+      config={editorConfig}
+      initFinished={initFinished}
+      styling="position: relative; margin-bottom: 20px; border: solid 1px transparent; border-radius: 20px; overflow: hidden;"
+      on:textChange='{(event) => {textChanged(event.detail.data)}}' 
+      on:editorChange='{(event) => {editorChange(event.detail.data); }}'
+    />
   {/if}
   <div
     id='buttonrow'
@@ -478,11 +481,13 @@
   import { exit } from "@tauri-apps/api/process";
   import { appWindow } from "@tauri-apps/api/window";
   import SimpleAutoComplete from "../components/SimpleAutocomplete.svelte";
+  import CodeMirror from "../components/CodeMirror.svelte";
   import showdown from 'showdown';
   import { theme } from '../stores/theme.js';
   import { state } from '../stores/state.js';
   import { account } from '../stores/account.js';
   import { email } from '../stores/email.js';
+  import { emailEditor } from '../stores/emailEditor.js';
   import { commandLineEmail } from '../stores/commandLineEmail.js'
 
   let receiver = {
@@ -490,7 +495,6 @@
       email: ''
     };
   let subject = '';
-  let emailbody = '';
   let emailState = 'edit';
   let accounts;
   let showChangeAccount = false;
@@ -512,12 +516,21 @@
   let oldState = '';
   let starting = true;
   let emails = [];
+  let editorConfig = {
+    language: 'markdown',
+    lineNumbers: false,
+    lineWrapping: true,
+    lineHighlight: true
+  };
+  let initFinished = true;
+
 
   onMount(()=>{
     getEmails();
     getAccounts();
     emailState = 'edit';
     oldState = 'edit';
+    initFinished = true;
   });
 
   afterUpdate(() => {
@@ -530,21 +543,32 @@
       $commandLineEmail = undefined;
     } 
     if(starting) {
+      console.log($email);
+      console.log($emailEditor);
       receiver = {
         name: '',
         email: $email.to 
       };
       var rec = document.getElementById('receiverInput');
       rec.value = $email.to;
-      body.value = $email.body;
       subject.value = $email.subject;
       starting = false;
+      $emailEditor.setValue($email.body);
     }
     if((emailState === 'edit')&&(oldState === 'preview')) {
-      emailbody.value = bodyValue;
+      $emailEditor.setValue(bodyValue);
       oldState = 'edit';
     }
   });
+
+  function editorChange(e) {
+    $emailEditor = e;
+  }
+
+  function textChanged(textCursor) {
+    $email.body = textCursor.value;
+    bodyValue = textCursor.value;
+  }
 
   function getEmails(callback) {
     // 
@@ -597,7 +621,7 @@
   function cancelAccountChange() {
     $account = origAccount;
     if(emailState === 'edit') {
-      bodyValue = emailbody.value;
+      bodyValue = $emailEditor.getValue();
     } else {
       makeHtml();
     }
@@ -631,7 +655,7 @@
     //
     $account = acc;
     if(emailState === 'edit') {
-      bodyValue = emailbody.value;
+      bodyValue = $emailEditor.getValue();
     } else {
       makeHtml();
     }
@@ -650,7 +674,7 @@
       // 
       // Keep a copy of the body value for when we exit preview mode.
       //
-      bodyValue = emailbody.value;
+      bodyValue = $emailEditor.getValue();
 
       // 
       // Set to preview and keep a copy of the new state.
@@ -770,7 +794,7 @@
       email: ''
     };
     subject.value = '';
-    emailbody.value = '';
+    $emailEditor.setValue('');
     bodyValue = '';
     $email.to = '';
     $email.subject = '';
@@ -885,7 +909,7 @@
   function saveEmailState() {
     var rec = document.getElementById('receiverInput');
     $email.to = rec.value;
-    $email.body = body.value;
+    $email.body = $emailEditor.getValue();
     $email.subject = subject.value;
   }
 </script>

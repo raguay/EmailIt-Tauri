@@ -1,6 +1,9 @@
-<div class="wrapper" style="height: {height}; width: {width};">
-  <div name="editor" id="CMeditor" bind:this='{CodeMirrorEditor}' >
-  </div>
+<div 
+  name="editor" 
+  id="CMeditor" 
+  bind:this='{CodeMirrorEditor}' 
+  style="height: {height}; width: {width}; {styling}"
+>
 </div>
 
 <style>
@@ -46,6 +49,7 @@
   
   export let height;
   export let width;
+  export let styling = '';
   export let config;
   export let initFinished = false;
 
@@ -178,7 +182,8 @@
       focus: focus,
       getEdView: getEdView,
       getEdState: getEdState,
-      isFocused: isFocused
+      isFocused: isFocused,
+      insertAtCursor: insertAtCursor
     };
     
     //
@@ -199,6 +204,15 @@
       // component is destroyed
     };
   });
+
+  function insertAtCursor(text) {
+    console.log(text);
+    if(typeof edView !== 'undefined') {
+      let point = getCursor();
+      let transaction = edView.state.update({changes: [{from: point, insert: text}]});
+      edView.dispatch(transaction);
+    }
+  }
 
   function isFocused() {
     if(typeof edView !== 'undefined') {
@@ -223,8 +237,10 @@
   }
 
   function replaceSelection(newText) {
+    console.log(newText);
     if(typeof edView !== 'undefined') {
-      let transaction = edView.state.update({changes: [{from: edView.state.selection.main.from, to: edView.state.selection.main.to}, {from: 0, insert: newText}]});
+      let point = edView.state.selection.main.from;
+      let transaction = edView.state.update({changes: [{from: edView.state.selection.main.from, to: edView.state.selection.main.to}, {from: point, insert: newText}]});
       edView.dispatch(transaction);
     }
   }
