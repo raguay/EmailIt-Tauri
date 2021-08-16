@@ -11,6 +11,8 @@
 {/if}
 <ScriptMenu 
 />
+<TemplateMenu
+/>
 
 <script>
   import { onMount, afterUpdate } from 'svelte';
@@ -21,9 +23,12 @@
   import ViewLog from './components/ViewLog.svelte';
   import Notes from './components/Notes.svelte';
   import ScriptMenu from './components/ScriptMenu.svelte';
+  import TemplateMenu from './components/TemplateMenu.svelte';
   import { state } from './stores/state.js';
   import { scripts } from './stores/scripts.js';
   import { showScripts } from './stores/showScripts.js';
+  import { templates } from './stores/templates.js';
+  import { showTemplates } from './stores/showTemplates.js';
   import { commandLineEmail } from './stores/commandLineEmail.js';
 
   let starting = true;
@@ -35,6 +40,7 @@
       }
     });
     getScriptsList();
+    getTemplatesList();
   });
 
   afterUpdate(() => {
@@ -62,6 +68,23 @@
       });
   }
 
+  function getTemplatesList() {
+    console.log("get templates...");
+    fetch('http://localhost:9978/api/template/list', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json'
+        }
+      }).then(resp => {
+        return resp.data;
+      })
+      .then(data => {
+        $templates = data.templates;
+        console.log($templates);
+        if(typeof callback !== 'undefined') callback();
+      });
+  }
+
   function keyDownProcessor(e) {
     if(e.ctrlKey) {
       switch(e.key) {
@@ -82,6 +105,11 @@
 
         case 'm':
           $showScripts = !$showScripts;
+          e.preventDefault();
+        break;
+
+        case 't':
+          $showTemplates = ! $showTemplates;
           e.preventDefault();
         break;
       }

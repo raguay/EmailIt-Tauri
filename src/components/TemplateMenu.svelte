@@ -1,6 +1,6 @@
 <div 
-  id='scriptmenu'
-  style="left: { $showScripts ? '10px' : '-900px'}; background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize}; border: solid 3px {$theme.borderColor};"
+  id='templatemenu'
+  style="left: { $showTemplates ? '10px' : '-900px'}; background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize}; border: solid 3px {$theme.borderColor};"
 >
   <input
     type="text"
@@ -13,14 +13,14 @@
     id='list'
   >
     <ul>
-      {#if typeof $scripts === 'object'}
-        {#each list as script, key}
+      {#if typeof $templates === 'object'}
+        {#each list as template, key}
           <li
-            on:click={() => { runScript(script); }}
+            on:click={() => { runTemplate(template); }}
             style="background-color: {cursor === key ? $theme.Purple : 'transparent'};"
             data-key={key}
           >
-            {script.name}
+            {template}
           </li>
         {/each}
       {/if}
@@ -29,7 +29,7 @@
 </div>
 
 <style>
-  #scriptmenu {
+  #templatemenu {
     diplay: flex;
     flex-direction: column;
     padding: 10px;
@@ -71,8 +71,8 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
   import { fetch, Body } from "@tauri-apps/api/http";
-  import { scripts } from '../stores/scripts.js';
-  import { showScripts } from '../stores/showScripts.js';
+  import { templates } from '../stores/templates.js';
+  import { showTemplates } from '../stores/showTemplates.js';
   import { theme } from '../stores/theme.js';
   import { state } from '../stores/state.js';
   import { noteEditor } from '../stores/noteEditor.js';
@@ -84,8 +84,8 @@
   let first = true;
   let cursor = 0;
 
-  $: list = searchScripts(search);
-  $: setDefaults($showScripts);
+  $: list = searchTempaltes(search);
+  $: setDefaults($showTemplates);
 
   onMount(() => {
   });
@@ -99,25 +99,25 @@
   }
 
   afterUpdate(() => {
-    if($showScripts&&first) {
-      list = searchScripts(search);
+    if($showTemplates&&first) {
+      list = searchTempaltes(search);
       first = false;
       searchInput.focus();
     }
   });
 
-  function searchScripts(text) {
+  function searchTempaltes(text) {
     var tmp = [];
     if(text === '') {
-      tmp = $scripts;
+      tmp = $templates;
     } else {
       text = text.toLowerCase();
-      tmp = $scripts.filter(item => item.name.toLowerCase().includes(text));
+      tmp = $templates.filter(item => item.toLowerCase().includes(text));
     }
     return(tmp);
   }
 
-  function runScript(script) {
+  function runTemplate(template) {
     var text = '';
     var selection = false;
     if($state === 'emailit') {
@@ -141,13 +141,13 @@
         text = $noteEditor.getValue();
       }
     }
-    fetch('http://localhost:9978/api/script/run', {
+    fetch('http://localhost:9978/api/template/run', {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json'
         },
         body: Body.json({
-          script: script.name,
+          template: template,
           text: text
         })
       }).then(resp => {
@@ -156,34 +156,26 @@
       .then(data => {
         if($state === 'emailit') {
           //
-          // Paste the script in the body of the email.
+          // Paste the template in the body of the email.
           //
           if(selection) {
             $emailEditor.replaceSelection(data.text);
           } else {
-            if(script.insert) {
-              $emailEditor.insertAtCursor(data.text);
-            } else {
-              $emailEditor.setValue(data.text);
-            }
+            $emailEditor.setValue(data.text);
           }
           $emailEditor.focus();
         } else if($state === 'notes') {
           //
-          // Paste the script in the current note at the location.
+          // Paste the template in the current note at the location.
           //
           if(selection) {
             $noteEditor.replaceSelection(data.text);
           } else {
-            if(script.insert) {
-              $noteEditor.insertAtCursor(data.text);
-            } else {
-              $noteEditor.setValue(data.text);
-            }
+            $noteEditor.setValue(data.text);
           }
           $noteEditor.focus();
         }
-        $showScripts = false;
+        $showTemplates = false;
         search = '';
       });
   }
@@ -204,11 +196,11 @@
 
       case 'Enter':
         e.preventDefault();
-        runScript(list[cursor]);
+        runTemplate(list[cursor]);
       break;
 
       case 'Escape':
-        $showScripts = false;
+        $showTemplates = false;
       break;
     }
   }

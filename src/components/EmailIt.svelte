@@ -313,6 +313,18 @@
       Clear
     </button>
     <button 
+      on:click={viewTemplateMenu}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Templates
+    </button>
+    <button 
+      on:click={viewScriptsMenu}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Scripts
+    </button>
+    <button 
       id="cancel"
       on:click={cancelEmail}
       style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
@@ -359,7 +371,7 @@
   #buttonrow button {
     border-radius: 10px;
     padding: 5px 20px 5px 20px;
-    margin: 0px 20px;
+    margin: 0px 5px;
     width: 100%;
     max-height: 40px;
     height: 40px;
@@ -489,6 +501,8 @@
   import { email } from '../stores/email.js';
   import { emailEditor } from '../stores/emailEditor.js';
   import { commandLineEmail } from '../stores/commandLineEmail.js'
+  import { showScripts } from '../stores/showScripts.js';
+  import { showTemplates } from '../stores/showTemplates.js';
 
   let receiver = {
       name: '',
@@ -911,6 +925,14 @@
     $email.to = rec.value;
     $email.body = $emailEditor.getValue();
     $email.subject = subject.value;
+  }
+
+  function viewScriptsMenu() {
+    $showScripts = ! $showScripts;
+  }
+
+  function viewTemplateMenu() {
+    $showTemplates = ! $showTemplates;
   }
 </script>
 

@@ -121,6 +121,24 @@
     >
       Logs
     </button>
+    <button
+      on:click={viewScriptsMenu}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Scripts
+    </button>
+    <button
+      on:click={viewTemplateMenu}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Templates
+    </button>
+    <button
+      on:click={viewRegExp}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      RegExp
+    </button>
   </div>
 </div>
 
@@ -146,7 +164,7 @@
   #buttonRow button {
     border-radius: 10px;
     padding: 5px 20px 5px 20px;
-    margin: 0px 20px;
+    margin: 0px 5px;
     max-height: 40px;
     height: 40px;
   }
@@ -191,6 +209,8 @@
   import { storedText } from '../stores/storedText.js';
   import { storedCursor } from '../stores/storedCursor.js';
   import { noteEditor } from '../stores/noteEditor.js';
+  import { showScripts } from '../stores/showScripts.js';
+  import { showTemplates } from '../stores/showTemplates.js';
   
   let editorConfig = {
     language: 'markdown',
@@ -294,6 +314,17 @@
     if(!Number.isInteger(cur)) cur = 0;
     $noteEditor.setCursor(cur);
     focus();
+  }
+
+  function viewScriptsMenu() {
+    $showScripts = ! $showScripts;
+  }
+
+  function viewTemplateMenu() {
+    $showTemplates = ! $showTemplates;
+  }
+
+  function viewRegExp() {
   }
 </script> 
 
