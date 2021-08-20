@@ -134,10 +134,16 @@
       Templates
     </button>
     <button
-      on:click={viewRegExp}
+      on:click={viewScripts}
       style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     >
-      RegExp
+      Edit Scripts
+    </button>
+    <button
+      on:click={viewTemplates}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Edit Templates
     </button>
   </div>
 </div>
@@ -161,9 +167,9 @@
     height: 40px;
   }
   
-  #buttonRow button {
+#buttonRow button {
     border-radius: 10px;
-    padding: 5px 20px 5px 20px;
+    padding: 5px 10px 5px 10px;
     margin: 0px 5px;
     max-height: 40px;
     height: 40px;
@@ -324,7 +330,12 @@
     $showTemplates = ! $showTemplates;
   }
 
-  function viewRegExp() {
+  function viewTemplates() {
+    $state = 'templates';
+  }
+
+  function viewScripts() {
+    $state = 'scripts';
   }
 </script> 
 

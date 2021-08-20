@@ -4,7 +4,7 @@
 >
   <input
     type="text"
-    bind:value={search}
+    bind:value={searchIn}
     bind:this={searchInput}
     on:keydown={keyDownProcessor}
     style="background-color: {$theme.textAreaColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize}; border: solid 3px {$theme.borderColor};"
@@ -77,14 +77,16 @@
   import { state } from '../stores/state.js';
   import { noteEditor } from '../stores/noteEditor.js';
   import { emailEditor } from '../stores/emailEditor.js';
+  import { templateEditor } from '../stores/templateEditor.js';
+  import { scriptEditor } from '../stores/scriptEditor.js';
 
-  let search = "";
+  let searchIn = "";
   let list = [];
   let searchInput;
   let first = true;
   let cursor = 0;
 
-  $: list = searchScripts(search);
+  $: list = searchScripts(searchIn);
   $: setDefaults($showScripts);
 
   onMount(() => {
@@ -93,14 +95,14 @@
   function setDefaults(flag) {
     if(flag) {
       cursor = 0;
-      search = '';
+      searchIn = '';
       searchInput.focus();
     }
   }
 
   afterUpdate(() => {
     if($showScripts&&first) {
-      list = searchScripts(search);
+      list = searchScripts(searchIn);
       first = false;
       searchInput.focus();
     }
@@ -108,11 +110,16 @@
 
   function searchScripts(text) {
     var tmp = [];
-    if(text === '') {
+    if((text === '')||(text === undefined)) {
       tmp = $scripts;
     } else {
       text = text.toLowerCase();
-      tmp = $scripts.filter(item => item.name.toLowerCase().includes(text));
+      tmp = $scripts.filter(item => {
+        if((item !== undefined)&&(item !== null)) {
+          return item.name.toLowerCase().includes(text);
+        }
+        return false;
+      });
     }
     return(tmp);
   }
@@ -139,6 +146,20 @@
         text = $noteEditor.getSelection();
       } else {
         text = $noteEditor.getValue();
+      }
+    } else if($state === 'scripts') {
+      if($scriptEditor.somethingSelected()) {
+        selection = true;
+        text = $scriptEditor.getSelection();
+      } else {
+        text = $scriptEditor.getValue();
+      }
+    } else if($state === 'templates') {
+      if($templateEditor.somethingSelected()) {
+        selection = true;
+        text = $templateEditor.getSelection();
+      } else {
+        text = $templateEditor.getValue();
       }
     }
     fetch('http://localhost:9978/api/script/run', {
@@ -182,9 +203,31 @@
             }
           }
           $noteEditor.focus();
+        } else if($state === 'scripts') {
+          if(selection) {
+            $scriptEditor.replaceSelection(data.text);
+          } else {
+            if(script.insert) {
+              $scriptEditor.insertAtCursor(data.text);
+            } else {
+              $scriptEditor.setValue(data.text);
+            }
+          }
+          $scriptEditor.focus();
+        } else if($state === 'templates') {
+          if(selection) {
+            $templateEditor.replaceSelection(data.text);
+          } else {
+            if(script.insert) {
+              $templateEditor.insertAtCursor(data.text);
+            } else {
+              $templateEditor.setValue(data.text);
+            }
+          }
+          $templateEditor.focus();
         }
         $showScripts = false;
-        search = '';
+        searchIn = '';
       });
   }
 

@@ -11,8 +11,9 @@
     height: 100%;
     width: 100%;
   }
-  .wrapper {
-    position: absolute;
+
+  #CMeditor:focus {
+    outline-color: transparent;
   }
 
   :global(.cm-wrap) {
@@ -27,8 +28,8 @@
 <script>
   import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
-  import { markdown } from "@codemirror/lang-markdown"
-  import { oneDark } from "@codemirror/theme-one-dark"
+  import { markdown } from "@codemirror/lang-markdown";
+  import { HighlightStyle, tags } from '@codemirror/highlight';
   import { highlightSpecialChars, drawSelection, highlightActiveLine, keymap, EditorView } from '@codemirror/view';
   import { EditorState, Prec } from '@codemirror/state';
   import { history, historyKeymap } from '@codemirror/history';
@@ -44,6 +45,7 @@
   import { defaultHighlightStyle } from '@codemirror/highlight';
   import { lintKeymap } from '@codemirror/lint';
   import { javascript } from '@codemirror/lang-javascript';
+  import { theme } from '../stores/theme.js';
 
   const dispatch = createEventDispatcher();
   
@@ -58,6 +60,101 @@
   let edView;
   let editorFunctions;
   let currentCursor;
+
+  //
+  // This is the basic theming definitions.
+  //
+  const editorTheme = /*@__PURE__*/EditorView.theme({
+      "&": {
+          color: $theme.textColor,
+          backgroundColor: $theme.textAreaColor
+      },
+      ".cm-content": {
+          caretColor: $theme.Cyan
+      },
+      "&.cm-focused .cm-cursor": { borderLeftColor: $theme.Cyan },
+      "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection": { backgroundColor: $theme.selectionColor },
+      ".cm-panels": { backgroundColor: $theme.backgroundColor, color: $theme.textColor },
+      ".cm-panels.cm-panels-top": { borderBottom: "2px solid black" },
+      ".cm-panels.cm-panels-bottom": { borderTop: "2px solid black" },
+      ".cm-searchMatch": {
+          backgroundColor: "#72a1ff59",
+          outline: "1px solid #457dff"
+      },
+      ".cm-searchMatch.cm-searchMatch-selected": {
+          backgroundColor: "#6199ff2f"
+      },
+      ".cm-activeLine": { backgroundColor: $theme.highlightBackgroundColor },
+      ".cm-selectionMatch": { backgroundColor: "#aafe661a" },
+      ".cm-matchingBracket, .cm-nonmatchingBracket": {
+          backgroundColor: "#bad0f847",
+          outline: "1px solid #515a6b"
+      },
+      ".cm-gutters": {
+          backgroundColor: $theme.backgroundColor,
+          color: $theme.green,
+          border: "none"
+      },
+      ".cm-activeLineGutter": {
+          backgroundColor: $theme.highlightBackgroundColor
+      },
+      ".cm-foldPlaceholder": {
+          backgroundColor: "transparent",
+          border: "none",
+          color: "#ddd"
+      },
+      ".cm-tooltip": {
+          border: "1px solid #181a1f",
+          backgroundColor: $theme.backgroundColor
+      },
+      ".cm-tooltip-autocomplete": {
+          "& > ul > li[aria-selected]": {
+              backgroundColor: $theme.highlightBackgroundColor,
+              color: $theme.textColor
+          }
+      }
+  }, { dark: true });
+  /**
+  The highlighting style for code.
+  */
+  const editorHighlightStyle = /*@__PURE__*/HighlightStyle.define([
+      { tag: tags.keyword,
+          color: $theme.keywordColor },
+      { tag: [tags.name, tags.deleted, tags.character, tags.propertyName, tags.macroName],
+          color: $theme.Pink },
+      { tag: [/*@__PURE__*/tags.function(tags.variableName), tags.labelName],
+          color: $theme.functionColor },
+      { tag: [tags.color, /*@__PURE__*/tags.constant(tags.name), /*@__PURE__*/tags.standard(tags.name)],
+          color: $theme.constantColor },
+      { tag: [/*@__PURE__*/tags.definition(tags.name), tags.separator],
+          color: $theme.textColor },
+      { tag: [tags.typeName, tags.className, tags.number, tags.changed, tags.annotation, tags.modifier, tags.self, tags.namespace],
+          color: $theme.Yellow },
+      { tag: [tags.operator, tags.operatorKeyword, tags.url, tags.escape, tags.regexp, tags.link, /*@__PURE__*/tags.special(tags.string)],
+          color: $theme.Cyan },
+      { tag: [tags.meta, tags.comment],
+          color: $theme.green },
+      { tag: tags.strong,
+          fontWeight: "bold" },
+      { tag: tags.emphasis,
+          fontStyle: "italic" },
+      { tag: tags.link,
+          color: $theme.green,
+          textDecoration: "underline" },
+      { tag: tags.heading,
+          fontWeight: "bold",
+          color: $theme.Pink },
+      { tag: [tags.atom, tags.bool, /*@__PURE__*/tags.special(tags.variableName)],
+          color: $theme.constantColor },
+      { tag: [tags.processingInstruction, tags.string, tags.inserted],
+          color: $theme.stringColor },
+      { tag: tags.invalid,
+          color: $theme.Red },
+  ]);
+  /**
+  Extension to enable the theme.
+  */
+  const editor = [editorTheme, editorHighlightStyle];
 
   function fire(name, data) {
     dispatch(name, {
@@ -106,7 +203,7 @@
           ...completionKeymap,
           ...lintKeymap
       ]),
-      oneDark,
+      editor,
       EditorView.updateListener.of(update => {
         if(update.docChanged) {
           fire('textChange', {

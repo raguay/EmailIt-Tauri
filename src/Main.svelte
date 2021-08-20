@@ -8,6 +8,10 @@
   <ViewLog />
 {:else if $state === 'notes'}
   <Notes />
+{:else if $state === 'scripts'}
+  <ScriptsEditor />
+{:else if $state === 'templates'}
+  <TemplatesEditor />
 {/if}
 <ScriptMenu 
 />
@@ -24,6 +28,8 @@
   import Notes from './components/Notes.svelte';
   import ScriptMenu from './components/ScriptMenu.svelte';
   import TemplateMenu from './components/TemplateMenu.svelte';
+  import ScriptsEditor from './components/ScriptsEditor.svelte';
+  import TemplatesEditor from './components/TemplatesEditor.svelte';
   import { state } from './stores/state.js';
   import { scripts } from './stores/scripts.js';
   import { showScripts } from './stores/showScripts.js';
@@ -69,7 +75,6 @@
   }
 
   function getTemplatesList() {
-    console.log("get templates...");
     fetch('http://localhost:9978/api/template/list', {
         method: 'GET',
         headers: {
@@ -80,7 +85,6 @@
       })
       .then(data => {
         $templates = data.templates;
-        console.log($templates);
         if(typeof callback !== 'undefined') callback();
       });
   }

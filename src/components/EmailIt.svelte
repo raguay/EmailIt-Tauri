@@ -370,7 +370,7 @@
 
   #buttonrow button {
     border-radius: 10px;
-    padding: 5px 20px 5px 20px;
+    padding: 5px 10px 5px 10px;
     margin: 0px 5px;
     width: 100%;
     max-height: 40px;
@@ -471,6 +471,10 @@
     width: 100%;
   }
 
+  :global(*:focus) {
+    outline: none;
+  }
+
   h1 {
     margin: 20px auto;
   }
@@ -557,8 +561,6 @@
       $commandLineEmail = undefined;
     } 
     if(starting) {
-      console.log($email);
-      console.log($emailEditor);
       receiver = {
         name: '',
         email: $email.to 

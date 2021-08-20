@@ -77,6 +77,8 @@
   import { state } from '../stores/state.js';
   import { noteEditor } from '../stores/noteEditor.js';
   import { emailEditor } from '../stores/emailEditor.js';
+  import { templateEditor } from '../stores/templateEditor.js';
+  import { scriptEditor } from '../stores/scriptEditor.js';
 
   let search = "";
   let list = [];
@@ -108,11 +110,16 @@
 
   function searchTempaltes(text) {
     var tmp = [];
-    if(text === '') {
+    if((text === '')||(text === undefined)) {
       tmp = $templates;
     } else {
       text = text.toLowerCase();
-      tmp = $templates.filter(item => item.toLowerCase().includes(text));
+      tmp = $templates.filter(item => {
+        if((item !== undefined)&&(item !== null)) {
+          return item.toLowerCase().includes(text);
+        }
+        return false;
+      });
     }
     return(tmp);
   }
@@ -139,6 +146,20 @@
         text = $noteEditor.getSelection();
       } else {
         text = $noteEditor.getValue();
+      }
+    } else if ($state === 'scripts') {
+      if($scriptEditor.somethingSelected()) {
+        selection = true;
+        text = $scriptEditor.getSelection();
+      } else {
+        text = $scriptEditor.getValue();
+      }
+    } else if ($state === 'templates') {
+      if($templateEditor.somethingSelected()) {
+        selection = true;
+        text = $templateEditor.getSelection();
+      } else {
+        text = $templateEditor.getValue();
       }
     }
     fetch('http://localhost:9978/api/template/run', {
@@ -174,6 +195,20 @@
             $noteEditor.setValue(data.text);
           }
           $noteEditor.focus();
+        } else if($state === 'scripts') {
+          if(selection) {
+            $scriptEditor.replaceSelection(data.text);
+          } else {
+            $scriptEditor.setValue(data.text);
+          }
+          $scriptEditor.focus();
+        } else if($state === 'templates') {
+          if(selection) {
+            $templateEditor.replaceSelection(data.text);
+          } else {
+            $templateEditor.setValue(data.text);
+          }
+          $templateEditor.focus();
         }
         $showTemplates = false;
         search = '';
