@@ -121,6 +121,7 @@
         return false;
       });
     }
+    tmp = tmp.sort((a,b) => a.toLowerCase() > b.toLowerCase());
     return(tmp);
   }
 

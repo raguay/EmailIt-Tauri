@@ -202,7 +202,7 @@
         return resp.data;
       })
       .then(data => {
-        list = data.templates;
+        list = data.templates.sort();
         if(typeof callback !== 'undefined') callback();
       });
   }

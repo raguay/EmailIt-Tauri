@@ -224,7 +224,7 @@
         return resp.data;
       })
       .then(data => {
-        list = data.scripts;
+        list = data.scripts.sort();
         if(typeof callback !== 'undefined') callback();
       });
   }
