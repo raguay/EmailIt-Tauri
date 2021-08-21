@@ -4,7 +4,7 @@
 
 # EmailIt
 
-A simple program for sending emails quickly through the Script Server. This version is mostly an exercise to learn Tauri and Rust.
+A simple program for sending emails quickly through the EmailItServer. It also has notes, scripts to act on the text, and templates. I'm still actively developing this program, but the basics are functional. I've only built it on a Macbook Pro with an M1 chip. I'll be adding other builds in the future.
 
 For the first time, you need to download the libraries used by:
 
@@ -12,7 +12,7 @@ For the first time, you need to download the libraries used by:
 npm install
 ```
 
-To build the full project, you run:
+To build the rust program and package it properly, you run:
 
 ```sh
 npm run build
@@ -21,5 +21,7 @@ cargo tauri build
 
 The `npm` line builds the frontend Svelte project. The `cargo` line builds the actual rust application that runs the program. 
 
-This requires the Script Server for the backend logic currently. I've not gotten far enough to have it all itegrated. This project is slowly being created.
+In order to get the EmailIt icon, you must copy it from `graphics/emailit.icns` to `EmailIt.app/Contents/Resources/icon.icns`. The normal build doesn't like my icns file for some reason. An an M1 chips system, the `cargo tauri` program doesn't have the `icon` subcommand to generate the right icns file.
+
+This requires the [EmailItServer](https://github.com/raguay/EmailItServer.git) for the backend logic currently. I've not gotten far enough to have it all itegrated. This project is slowly being created.
 
