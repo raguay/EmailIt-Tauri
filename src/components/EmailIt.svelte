@@ -210,14 +210,13 @@
       <SimpleAutoComplete 
         inputId="receiverInput"
         items={emails} 
-        labelFieldName="email"
-        bind:selectedItem={receiver}
+        bind:value={receiver}
         inputClassName='receiverInput'
         className='receiverDiv'
         create=true
         theme={$theme}
         onBlur={val => {
-          $email.to = receiver.value;
+          $email.to = receiver;
         }}
       />
     </div>
@@ -334,6 +333,30 @@
   </div>
 </div>
 
+{#if showAlert}
+  <div
+    id='alert'
+    style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+  >
+    <h1>{alertTitle}</h1>
+    <p>{alertMsg}</p>
+    {#if badEmails.length > 0}
+      <ul>
+        {#each badEmails as item}
+          <li>{item}</li>
+        {/each}
+      </ul>
+    {/if}
+    <button
+      class="alertbutton"
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor}; border-color: {$theme.backgroundColor};"
+      on:click="{() => { showAlert = false;}}"
+    >
+      Close
+    </button>
+  </div>
+{/if}
+
 <style>
   :global(body) {
     margin: 0px;
@@ -352,6 +375,28 @@
     flex-direction: column;
     margin: 0px;
     padding: 20px;
+  }
+
+  #alert {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    padding: 20px;
+    max-height: 70%;
+    border: solid 3px;
+    border-radius: 10px;
+    z-index: 400;
+  }
+
+  #alert ul {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  #alert button {
+    margin: 20px 10px 0px 10px;
   }
 
   .headerRow {
@@ -458,6 +503,12 @@
     width: 310px;
   }
 
+  .alertbutton {
+    border: solid 1px transparent;
+    border-radius: 10px;
+    padding: 5px;
+  }
+
   label {
     display: grid;
     justify-content: right;
@@ -508,10 +559,7 @@
   import { showScripts } from '../stores/showScripts.js';
   import { showTemplates } from '../stores/showTemplates.js';
 
-  let receiver = {
-      name: '',
-      email: ''
-    };
+  let receiver = '';
   let subject = '';
   let emailState = 'edit';
   let accounts;
@@ -541,7 +589,10 @@
     lineHighlight: true
   };
   let initFinished = true;
-
+  let badEmails = [];
+  let alertTitle = '';
+  let alertMsg = '';
+  let showAlert = false;
 
   onMount(()=>{
     getEmails();
@@ -553,18 +604,12 @@
 
   afterUpdate(() => {
     if(($commandLineEmail !== undefined)&&($commandLineEmail !== '')) {
-      receiver = {
-        name: '',
-        email: $commandLineEmail
-      };
+      receiver = $commandLineEmail;
       $email.to = $commandLineEmail;
       $commandLineEmail = undefined;
     } 
     if(starting) {
-      receiver = {
-        name: '',
-        email: $email.to 
-      };
+      receiver = $email.to;
       var rec = document.getElementById('receiverInput');
       rec.value = $email.to;
       subject.value = $email.subject;
@@ -599,7 +644,13 @@
         return resp.data;
       })
       .then(data => {
-        emails = data.emails;
+        emails = data.emails.map(item => {
+          if(item.name === '') {
+            return(item.email);
+          } else {
+            return(`${item.name.trim()} <${item.email.trim()}>`);
+          }
+        });
         if(typeof callback !== 'undefined') callback();
       });
   }
@@ -708,7 +759,7 @@
       // 
       showPreview = true;
     } else {
-      alert("Invalid Email");
+      showInvalidEmails();
     }
   }
 
@@ -745,7 +796,7 @@
       toAddress = em;
     }
     if(validate(toAddress)) {
-      addToEmails('',toAddress);
+      addToEmails(toAddress);
       var bodyText = bodyValue + cleanTags($account.signiture);
       showPreview = false;
       emailState = 'edit';
@@ -764,11 +815,42 @@
         })
       });
     } else {
-      alert('Invalid Email');
+      showInvalidEmails();
     }
   }
 
-  function validate(email) {
+  function showInvalidEmails() {
+    alertTitle = 'Invalid Emails';
+    alertMsg = 'Please fix these emails!';
+    showAlert = true;
+  }
+
+  function validate(emailLine) {
+    var valid = true;
+    badEmails = [];
+    emailLine.toString().split(',').forEach(item => {
+      const svalid = validateSingle(item.trim());
+      if(!svalid) {
+        valid = false;
+        badEmails.push(item);
+      }
+    });
+    return valid;
+  }
+
+  function validateSingle(email) {
+    if(email.includes('<')) {
+      //
+      // It's an email with a name infront. Get the email to check.
+      //
+      const nameRegexp = new RegExp(/^[^<]*\<([^\>]*)\>/);
+      const matches = email.match(nameRegexp);
+      email = matches[1];
+    }
+
+    //
+    // Check the email itself.
+    //
     const emailRegexp = new RegExp(
       /^[a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1}([a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1})*[a-zA-Z0-9]@[a-zA-Z0-9][-\.]{0,1}([a-zA-Z][-\.]{0,1})*[a-zA-Z0-9]\.[a-zA-Z0-9]{1,}([\.\-]{0,1}[a-zA-Z]){0,}[a-zA-Z0-9]{0,}$/i
     );
@@ -776,7 +858,26 @@
     return emailRegexp.test(email);
   }
 
-  function addToEmails(name, email) {
+  function addToEmails(emailLine) {
+    emailLine.toString().split(',').forEach(item => {
+      var email = item;
+      var name = '';
+      if(item.includes('<')) {
+        //
+        // It's an email with a name infront. Get the email to check.
+        //
+        const nameRegexp = new RegExp(/^([^<]*)\<([^\>]*)\>/);
+        const matches = item.match(nameRegexp);
+        name = matches[1];
+        email = matches[2];
+      }
+      addToEmailsSingle(name, email);
+    });
+  }
+
+  function addToEmailsSingle(name, email) {
+    email = email.trim();
+    name = name.trim();
     emails = emails.filter(item => item.email !== email);
     emails.push({
       name: name,
@@ -805,10 +906,9 @@
   }
 
   function clearEmail() {
-    receiver = {
-      name: '',
-      email: ''
-    };
+    var rec = document.getElementById('receiverInput');
+    rec.value = '';
+    receiver = "";
     subject.value = '';
     $emailEditor.setValue('');
     bodyValue = '';
