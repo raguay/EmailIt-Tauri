@@ -207,18 +207,38 @@
       >
         To:
       </label>
-      <SimpleAutoComplete 
-        inputId="receiverInput"
-        items={emails} 
+      <input
+        id='receiverInput'
+        class='receiverInput'
         bind:value={receiver}
-        inputClassName='receiverInput'
-        className='receiverDiv'
-        create=true
-        theme={$theme}
-        onBlur={val => {
-          $email.to = receiver;
+        bind:this={receiverDOM}
+        on:blur={() => { inputBlur(); }}
+        on:focus={() => { 
+          showEmailList = true; 
+          generateEmailList(); 
+          receiverDOM.selectionStart = receiver.length;
         }}
+        on:keydown={(e) => { generateEmailList(e); }}
+        on:keyup={(e) => { generateEmailList(e); }}
+        on:change={() => { generateEmailList(); }}
+        style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
       />
+      {#if showEmailList && (elist.length > 0)}
+        <div
+          id='elist'
+          style="width: {receiverDOM.offsetWidth}px; left: {cumulativeOffset(receiverDOM).left}px; top: {cumulativeOffset(receiverDOM).top + 40}px; background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+        >
+          <ul>
+            {#each elist as item}
+              <li
+                on:click={() => { addToInput(item); receiverDOM.focus(); }}
+              >
+                {item}
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/if}
     </div>
     <div
       class='headerRow'
@@ -478,6 +498,27 @@
     margin: 0px 0px 15px 0px;
   }
 
+  #elist {
+    position: absolute;
+    z-index: 100;
+    max-height: 400px;
+    overflow: scroll;
+    border: solid 1px transparent;
+    border-radius: 10px;
+  }
+
+  ul {
+    padding: 10px;
+    margin: 0px;
+  }
+
+  li {
+    list-style: none;
+    padding: 0px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
   :global(.receiverInput) {
     margin: 0px;
     padding: 0px;
@@ -543,7 +584,7 @@
 </style>
 
 <script>
-  import { afterUpdate, onMount } from 'svelte';
+  import { afterUpdate, onMount, tick } from 'svelte';
   import { fetch, Body } from "@tauri-apps/api/http";
   import { exit } from "@tauri-apps/api/process";
   import { appWindow } from "@tauri-apps/api/window";
@@ -590,9 +631,12 @@
   };
   let initFinished = true;
   let badEmails = [];
+  let elist = [];
   let alertTitle = '';
   let alertMsg = '';
   let showAlert = false;
+  let showEmailList = false;
+  let receiverDOM;
 
   onMount(()=>{
     getEmails();
@@ -621,6 +665,33 @@
       oldState = 'edit';
     }
   });
+
+  function generateEmailList(e) {
+    if((e !== undefined) && ((e.key === 'Escape')||(e.key === 'Tab'))) {
+      showEmailList = false;
+      if(e.key !== 'Tab') e.preventDefault();
+    } else {
+      var fullLine = receiver.toString().toLowerCase();
+      var currentPart = '';
+      var parts = fullLine.split(',');
+      if(parts.length > 1) {
+        currentPart = parts[parts.length - 1];
+        elist = emails.filter(item => item.toString().toLowerCase().includes(currentPart.trim()));
+      } else {
+        elist = emails.filter(item => item.toString().toLowerCase().includes(fullLine));
+      }
+    }
+  }
+
+  function addToInput(newEmail) {
+    var parts = receiver.split(',');
+    if(parts.length > 1) {
+      receiver = parts.slice(0,parts.length - 1).map(item => item.trim()).join(',') + ', ' + newEmail;
+      receiverDOM.selectionStart = receiver.length;
+    } else {
+      receiver = newEmail;
+    }
+  }
 
   function editorChange(e) {
     $emailEditor = e;
@@ -1035,6 +1106,23 @@
 
   function viewTemplateMenu() {
     $showTemplates = ! $showTemplates;
+  }
+
+  function cumulativeOffset(element) {
+    var top = 0, left = 0;
+    do {
+        top += element.offsetTop  || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+    } while(element);
+    return {
+        top: top,
+        left: left
+    };
+  }
+
+  function inputBlur() {
+    $email.to = receiver;
   }
 </script>
 
