@@ -1,4 +1,7 @@
-<div id='main' style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize};">
+<div 
+  id='main' 
+  style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize};"
+>
   {#if showNewAccount}
     <div
       id="newAccountDialog"
@@ -344,11 +347,11 @@
       Scripts
     </button>
     <button 
-      id="cancel"
-      on:click={cancelEmail}
+      id="addressBook"
+      on:click={showAddressBook}
       style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     >
-      Close
+      Address Book
     </button>
   </div>
 </div>
@@ -375,6 +378,12 @@
       Close
     </button>
   </div>
+{/if}
+
+{#if showAddressB }
+  <AddressBook
+    bind:show={showAddressB}
+  />
 {/if}
 
 <style>
@@ -590,6 +599,7 @@
   import { appWindow } from "@tauri-apps/api/window";
   import SimpleAutoComplete from "../components/SimpleAutocomplete.svelte";
   import CodeMirror from "../components/CodeMirror.svelte";
+  import AddressBook from "../components/AddressBook.svelte";
   import showdown from 'showdown';
   import { theme } from '../stores/theme.js';
   import { state } from '../stores/state.js';
@@ -636,6 +646,7 @@
   let alertMsg = '';
   let showAlert = false;
   let showEmailList = false;
+  let showAddressB = false;
   let receiverDOM;
 
   onMount(()=>{
@@ -728,7 +739,7 @@
 
   function changeAccount() {
     origAccount = $account;
-    showChangeAccount = true;
+    showChangeAccount = !showChangeAccount;
   }
 
   function saveAccount() {
@@ -1123,6 +1134,10 @@
 
   function inputBlur() {
     $email.to = receiver;
+  }
+
+  function showAddressBook() {
+    showAddressB = !showAddressB;
   }
 </script>
 

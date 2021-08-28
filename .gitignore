@@ -2,5 +2,6 @@
 /public/build/
 /src-tauri/target
 *.log
+*.zip
 .DS_Store
 /macOS/EmailIt.zip
