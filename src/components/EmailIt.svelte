@@ -426,6 +426,7 @@
 
   #alert button {
     margin: 20px 10px 0px 10px;
+    cursor: pointer;
   }
 
   .headerRow {
@@ -450,6 +451,7 @@
     max-height: 40px;
     height: 40px;
     width: auto;
+    cursor: pointer;
   }
 
   #header {
@@ -474,6 +476,7 @@
 
   #accountsDiv button {
     border-radius: 20px;
+    cursor: pointer;
   }
 
   #newAccountDialog {
@@ -557,6 +560,7 @@
     border: solid 1px transparent;
     border-radius: 10px;
     padding: 5px;
+    cursor: pointer;
   }
 
   label {

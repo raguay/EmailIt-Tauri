@@ -118,6 +118,7 @@
   #buttonrow button {
     border-radius: 10px;
     margin: 10px;
+    cursor: pointer;
   }
 
   #addeditdiv {

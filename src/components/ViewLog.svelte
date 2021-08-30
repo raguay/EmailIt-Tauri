@@ -28,6 +28,18 @@
     >
       Notes
     </button>
+    <button
+      on:click={viewNodeRed}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Node-Red
+    </button>
+    <button
+      on:click={viewNodeRedDashboard}
+      style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+    >
+      Node-Red Dashboard
+    </button>
   </div>
 </div>
 
@@ -66,6 +78,7 @@
     max-height: 40px;
     height: 40px;
     width: auto;
+    cursor: pointer;
   }
 
 </style> 
@@ -73,6 +86,7 @@
 <script> 
   import { onMount, afterUpdate } from 'svelte';
   import { fetch } from "@tauri-apps/api/http";
+  import { open } from "@tauri-apps/api/shell";
   import { theme } from "../stores/theme.js";
   import { state } from "../stores/state.js";
 
@@ -122,6 +136,14 @@
 
   function viewNotes() {
     state.set('notes');
+  }
+
+  async function viewNodeRed() {
+    await open('http://localhost:9978/red/admin');
+  }
+  
+  async function viewNodeRedDashboard() {
+    await open('http://localhost:9978/red/api/ui');
   }
 </script> 
 

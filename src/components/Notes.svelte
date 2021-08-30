@@ -173,6 +173,7 @@
     margin: 0px 5px;
     max-height: 40px;
     height: 40px;
+    cursor: pointer;
   }
 
   #editorRow {
@@ -198,6 +199,7 @@
     padding: 0px;
     border-radius: 50px;
     border: solid 2px transparent;
+    cursor: pointer;
   }
 
   .selectedButton {

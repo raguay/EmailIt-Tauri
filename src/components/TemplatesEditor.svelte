@@ -155,6 +155,7 @@
     margin: 0px 5px;
     max-height: 40px;
     height: 40px;
+    cursor: pointer;
   }
 </style> 
 
