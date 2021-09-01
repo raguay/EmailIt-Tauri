@@ -15,95 +15,16 @@
     <div 
       id="noteButtons"
     >
-      <div 
-        class="noteButton {$currentNote === 0 ? 'selectedButton' : ''}"
-        on:click={() => {
-          openNote(0); 
-        }}
-        style="background-color: {$theme.Circle0};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 1 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(1); 
-        }}
-        style="background-color: {$theme.Circle1};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 2 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(2); 
-        }}
-        style="background-color: {$theme.Circle2};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 3 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(3); 
-        }}
-        style="background-color: {$theme.Circle3};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 4 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(4); 
-        }}
-        style="background-color: {$theme.Circle4};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 5 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(5); 
-        }}
-        style="background-color: {$theme.Circle5};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 6 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(6); 
-        }}
-        style="background-color: {$theme.Circle6};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 7 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(7); 
-        }}
-        style="background-color: {$theme.Circle7};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 8 ? 'selectedButton' : ''}"
-        on:click={() => { 
-          storeCurrentCursor();
-          openNote(8); 
-        }}
-        style="background-color: {$theme.Circle8};"
-      >
-      </div>
-      <div 
-        class="noteButton {$currentNote === 9 ? 'selectedButton' : ''}"
-        on:click= {() => { 
-          storeCurrentCursor();
-          openNote(9); 
-        }}
-        style="background-color: {$theme.Circle9};"
-      >
-      </div>
+      {#each $theme.buttons as button, key}
+        <div 
+          class="noteButton {$currentNote === $theme.buttons[key].id ? 'selectedButton' : ''}"
+          on:click={() => {
+            openNote(key); 
+          }}
+          style="background-color: {$theme.buttons[key].color};"
+        >
+        </div>
+      {/each}
     </div>
   </div>
   <div 

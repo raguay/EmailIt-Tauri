@@ -20,16 +20,48 @@ let defaultTheme = {
   keywordColor: "#FFFF80",
   highlightBackgroundColor: "#4f4f5f",
   selectionColor: "#22212C",
-  Circle0: '#80FFEA',
-  Circle1: '#8AFF80',
-  Circle2: '#FFCA80',
-  Circle3: '#FF80BF',
-  Circle4: '#9580FF',
-  Circle5: '#FF9580',
-  Circle6: 'blue',
-  Circle7: 'green',
-  Circle8: 'red',
-  Circle9: 'purple',
+  buttons: [
+    {
+      color: '#80FFEA',
+      id: 0
+    },
+    {
+      color: '#8AFF80',
+      id: 1
+    },
+    {
+      color: '#FFCA80',
+      id: 2
+    },
+    {
+      color: '#FF80BF',
+      id: 3
+    },
+    {
+      color: '#9580FF',
+      id: 4
+    },
+    {
+      color: '#FF9580',
+      id: 5
+    },
+    {
+      color: 'blue',
+      id: 6
+    },
+    {
+      color: 'green',
+      id: 7
+    },
+    {
+      color: 'red',
+      id: 8
+    },
+    {
+      color: 'purple',
+      id: 9
+    },
+  ]
 };
 
 export const theme = writable( defaultTheme );

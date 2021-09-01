@@ -12,6 +12,8 @@
   <ScriptsEditor />
 {:else if $state === 'templates'}
   <TemplatesEditor />
+{:else if $state === 'preferences'}
+  <Preferences />
 {/if}
 <ScriptMenu 
 />
@@ -30,6 +32,7 @@
   import TemplateMenu from './components/TemplateMenu.svelte';
   import ScriptsEditor from './components/ScriptsEditor.svelte';
   import TemplatesEditor from './components/TemplatesEditor.svelte';
+  import Preferences from './components/Preferences.svelte';
   import { state } from './stores/state.js';
   import { scripts } from './stores/scripts.js';
   import { showScripts } from './stores/showScripts.js';
@@ -90,20 +93,23 @@
   }
 
   function keyDownProcessor(e) {
-    if(e.ctrlKey) {
+    if(e.metaKey && (e.key === ',')) {
+      e.preventDefault();
+      $state = 'preferences';
+    } else if(e.ctrlKey) {
       switch(e.key) {
         case 'e': 
-          state.set('emailit');
+          $state = 'emailit';
           e.preventDefault();
         break;
 
         case 'v':
-          state.set('viewlog');
+          $state = 'viewlog';
           e.preventDefault();
         break;
 
         case 'n':
-          state.set('notes');
+          $state = 'notes';
           e.preventDefault();
         break;
 
@@ -116,6 +122,10 @@
           $showTemplates = ! $showTemplates;
           e.preventDefault();
         break;
+
+        case 'p':
+          $state = 'preferences';
+          e.preventDefault();
       }
     }
   }
