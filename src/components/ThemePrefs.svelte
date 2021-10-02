@@ -13,9 +13,12 @@
       bind:value={style}
       on:change="{(event) => {styleSelectorChange()}}"
     >
-    {#each getStyleList() as item}
-      <option value={item}>{item}</option>
-    {/each}
+      {#if themeList !== undefined}
+        {#each themeList as item}
+          <option value={item}>{item}</option>
+        {/each}
+      {/if}
+      <option value='New'>New</option>
     </select>
   {/if}
 </div>
@@ -32,193 +35,159 @@
 </div>
 <h3>Various Other Colors</h3>
 <div id="variousOtherColorsDiv">
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      textAreaColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'textAreaColor',
-      color: $theme.textAreaColor
-    });}}" style="background-color: {$theme.textAreaColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.textAreaColor}</label>
+  <label class="variousPickerLabel1">
+    textAreaColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'textAreaColor',
+    color: $theme.textAreaColor
+  });}}" style="background-color: {$theme.textAreaColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      backgroundColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'backgroundColor',
-      color: $theme.backgroundColor
-    });}}" style="background-color: {$theme.backgroundColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.backgroundColor}</label>
+  <label class="variousPickerLabel2">{$theme.textAreaColor}</label>
+  <label class="variousPickerLabel1">
+    backgroundColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'backgroundColor',
+    color: $theme.backgroundColor
+  });}}" style="background-color: {$theme.backgroundColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      textColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'textColor',
-      color: $theme.textColor
-    });}}" style="background-color: {$theme.textColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.textColor}</label>
+  <label class="variousPickerLabel2">{$theme.backgroundColor}</label>
+  <label class="variousPickerLabel1">
+    textColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'textColor',
+    color: $theme.textColor
+  });}}" style="background-color: {$theme.textColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      borderColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'borderColor',
-      color: $theme.borderColor
-    });}}" style="background-color: {$theme.borderColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.borderColor}</label>
+  <label class="variousPickerLabel2">{$theme.textColor}</label>
+  <label class="variousPickerLabel1">
+    borderColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'borderColor',
+    color: $theme.borderColor
+  });}}" style="background-color: {$theme.borderColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      functionColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'functionColor',
-      color: $theme.functionColor
-    });}}" style="background-color: {$theme.functionColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.functionColor}</label>
+  <label class="variousPickerLabel2">{$theme.borderColor}</label>
+  <label class="variousPickerLabel1">
+    functionColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'functionColor',
+    color: $theme.functionColor
+  });}}" style="background-color: {$theme.functionColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      stringColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'stringColor',
-      color: $theme.stringColor
-    });}}" style="background-color: {$theme.stringColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.stringColor}</label>
+  <label class="variousPickerLabel2">{$theme.functionColor}</label>
+  <label class="variousPickerLabel1">
+    stringColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'stringColor',
+    color: $theme.stringColor
+  });}}" style="background-color: {$theme.stringColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      constantColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'constantColor',
-      color: $theme.constantColor
-    });}}" style="background-color: {$theme.constantColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.constantColor}</label>
+  <label class="variousPickerLabel2">{$theme.stringColor}</label>
+  <label class="variousPickerLabel1">
+    constantColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'constantColor',
+    color: $theme.constantColor
+  });}}" style="background-color: {$theme.constantColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      keywordColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'keywordColor',
-      color: $theme.keywordColor
-    });}}" style="background-color: {$theme.keywordColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.keywordColor}</label>
+  <label class="variousPickerLabel2">{$theme.constantColor}</label>
+  <label class="variousPickerLabel1">
+    keywordColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'keywordColor',
+    color: $theme.keywordColor
+  });}}" style="background-color: {$theme.keywordColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      highlightBackgroundColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'highlightBackgroundColor',
-      color: $theme.highlightBackgroundColor
-    });}}" style="background-color: {$theme.highlightBackgroundColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.highlightBackgroundColor}</label>
+  <label class="variousPickerLabel2">{$theme.keywordColor}</label>
+  <label class="variousPickerLabel1">
+    highlightBackgroundColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'highlightBackgroundColor',
+    color: $theme.highlightBackgroundColor
+  });}}" style="background-color: {$theme.highlightBackgroundColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      selectionColor
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'selectionColor',
-      color: $theme.selectionColor
-    });}}" style="background-color: {$theme.selectionColor};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.selectionColor}</label>
+  <label class="variousPickerLabel2">{$theme.highlightBackgroundColor}</label>
+  <label class="variousPickerLabel1">
+    selectionColor
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'selectionColor',
+    color: $theme.selectionColor
+  });}}" style="background-color: {$theme.selectionColor};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Cyan
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Cyan',
-      color: $theme.Cyan
-    });}}" style="background-color: {$theme.Cyan};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Cyan}</label>
+  <label class="variousPickerLabel2">{$theme.selectionColor}</label>
+  <label class="variousPickerLabel1">
+    Cyan
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Cyan',
+    color: $theme.Cyan
+  });}}" style="background-color: {$theme.Cyan};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Green
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Green',
-      color: $theme.Green
-    });}}" style="background-color: {$theme.Green};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Green}</label>
+  <label class="variousPickerLabel2">{$theme.Cyan}</label>
+  <label class="variousPickerLabel1">
+    Green
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Green',
+    color: $theme.Green
+  });}}" style="background-color: {$theme.Green};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Orange
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Orange',
-      color: $theme.Orange
-    });}}" style="background-color: {$theme.Orange};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Orange}</label>
+  <label class="variousPickerLabel2">{$theme.Green}</label>
+  <label class="variousPickerLabel1">
+    Orange
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Orange',
+    color: $theme.Orange
+  });}}" style="background-color: {$theme.Orange};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Pink
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Pink',
-      color: $theme.Pink
-    });}}" style="background-color: {$theme.Pink};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Pink}</label>
+  <label class="variousPickerLabel2">{$theme.Orange}</label>
+  <label class="variousPickerLabel1">
+    Pink
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Pink',
+    color: $theme.Pink
+  });}}" style="background-color: {$theme.Pink};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Purple
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Purple',
-      color: $theme.Purple
-    });}}" style="background-color: {$theme.Purple};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Purple}</label>
+  <label class="variousPickerLabel2">{$theme.Pink}</label>
+  <label class="variousPickerLabel1">
+    Purple
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Purple',
+    color: $theme.Purple
+  });}}" style="background-color: {$theme.Purple};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Red
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Red',
-      color: $theme.Red
-    });}}" style="background-color: {$theme.Red};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Red}</label>
+  <label class="variousPickerLabel2">{$theme.Purple}</label>
+  <label class="variousPickerLabel1">
+    Red
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Red',
+    color: $theme.Red
+  });}}" style="background-color: {$theme.Red};" >
   </div>
-  <div class="circlePickerWrap">
-    <label class="circlePickerLabel">
-      Yellow
-    </label>
-    <div class="circlePicker" on:click="{(event) => {changeColor({
-      id: 'Yellow',
-      color: $theme.Yellow
-    });}}" style="background-color: {$theme.Yellow};" >
-    </div>
-    <label class="circlePickerLabel">{$theme.Yellow}</label>
+  <label class="variousPickerLabel2">{$theme.Red}</label>
+  <label class="variousPickerLabel1">
+    Yellow
+  </label>
+  <div class="circlePicker" on:click="{(event) => {changeColor({
+    id: 'Yellow',
+    color: $theme.Yellow
+  });}}" style="background-color: {$theme.Yellow};" >
   </div>
+  <label class="variousPickerLabel2">{$theme.Yellow}</label>
 </div>
 {#if $theme !== undefined}
   <ColorPicker 
@@ -240,6 +209,11 @@
   }
   
   #variousOtherColorsDiv {
+    display: grid;
+    grid-auto-flow: row dense;
+    grid-template-columns: 400px 40px 80px;
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
     margin-left: 10px;
   }
 
@@ -299,6 +273,20 @@
     margin: 10px auto;
   }
 
+  .variousPickerLabel1 {
+    font-size: 25px;
+    margin: 0px 10px 0px 10px;
+    grid-column: 1;
+    text-align: right;
+  }
+
+  .variousPickerLabel2 {
+    font-size: 25px;
+    margin: 0px 10px 0px 10px;
+    user-select: text;
+    grid-column: 3;
+  }
+
   .circlePickerLabel {
     font-size: 25px;
     margin: 0px 10px 0px 10px;
@@ -319,10 +307,13 @@
     border-radius: 30px;
     cursor: pointer;
     border: solid 1px white;
+    grid-column: 2;
   }
 </style>
 
 <script>
+  import { onMount } from 'svelte';
+  import { fetch, Body } from "@tauri-apps/api/http";
   import ColorPicker from './ColorPicker.svelte';
   import { theme } from '../stores/theme.js';
   
@@ -334,7 +325,27 @@
   let pickerType = '';
   let style = 'default';
   let explanation;
+  let themeList;
   
+  onMount(() => {
+    getThemes();
+  });
+  
+  function getThemes() {
+    fetch('http://localhost:9978/api/theme/list', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json'
+        }
+      }).then(resp => {
+        return resp.data;
+      })
+      .then(data => {
+        themeList = data.themes;
+        if(typeof callback !== 'undefined') callback();
+      });
+  }
+
   function setKeepInput(style, test) {
     if((style === 'New')&&(!test)) {
       keepNewInput = true;

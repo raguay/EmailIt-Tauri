@@ -1,24 +1,22 @@
 <div 
-  id='ExtScriptEditor' 
-  style="color: {$theme.textcolor}; background-color: {$theme.appBackground};"
+  id='EnvEditor' 
+  style="color: {$theme.textColor}; background-color: {$theme.backgroundColor};"
 >
   {#if view === 'lists'}
     <div id='listviews'>
-      <ExtScriptList
-        config={config}
+      <EnvList
         on:changeView={changeView}
       />
     </div>
   {:else if view === 'script'}
-    <ExtScript
-      config={config}
+    <Env
       on:changeView={changeView}
     />
   {/if}
 </div>
 
 <style>
-  #ExtScriptEditor {
+  #EnvEditor {
     display: flex;
     flex-direction: column;
     padding: 5px;
@@ -36,10 +34,11 @@
 </style>
 
 <script>
-  import { onMount  } from 'svelte';
-  import ExtScriptList from './ExtScriptList.svelte';
-  import ExtScript from './ExtScript.svelte';
-  import { theme } from '../stores/theme.js';
+  import { createEventDispatcher, onMount, tick  } from 'svelte';
+  import EnvList from './EnvList.svelte';
+  import Env from './Env.svelte';
+  
+  const dispatch = createEventDispatcher();
   
   let view = 'lists';
   let config = {};

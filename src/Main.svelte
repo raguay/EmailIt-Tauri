@@ -39,6 +39,7 @@
   import { templates } from './stores/templates.js';
   import { showTemplates } from './stores/showTemplates.js';
   import { commandLineEmail } from './stores/commandLineEmail.js';
+  import { theme } from './stores/theme.js';
 
   let starting = true;
 
@@ -50,6 +51,7 @@
     });
     getScriptsList();
     getTemplatesList();
+    getTheme();
   });
 
   afterUpdate(() => {
@@ -61,6 +63,21 @@
       starting = false;
     }
   });
+  
+  function getTheme() {
+    fetch('http://localhost:9978/api/theme', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json'
+        }
+      }).then(resp => {
+        return resp.data;
+      })
+      .then(data => {
+        $theme = data.theme;
+        if(typeof callback !== 'undefined') callback();
+      });
+  }
 
   function getScriptsList() {
     fetch('http://localhost:9978/api/scripts/list', {

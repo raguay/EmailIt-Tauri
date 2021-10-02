@@ -31,6 +31,10 @@ style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; c
       <ThemePrefs />
     {:else if currentPref === 'Node-Red'}
       <PrefNodeRed />
+    {:else if currentPref === 'External Scripts'}
+      <ExtScriptEditor />
+    {:else if currentPref === 'Environments'}
+      <EnvEditor />
     {/if}
   </div>
   <div id="buttonPanel">
@@ -121,6 +125,8 @@ style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; c
   import PrefNodeRed from './PrefNodeRed.svelte';
   import GenPrefs from './GenPrefs.svelte';
   import ThemePrefs from './ThemePrefs.svelte';
+  import ExtScriptEditor from './ExtScriptEditor.svelte';
+  import EnvEditor from './EnvEditor.svelte';
   import { theme } from '../stores/theme.js';
   import { state } from '../stores/state.js';
 
@@ -131,6 +137,10 @@ style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; c
     name: "Theme"
   }, {
     name: "Node-Red"
+  }, {
+    name: "External Scripts"
+  }, {
+    name: "Environments"
   }];
 
   function setNewCurrent(newCurrent) {

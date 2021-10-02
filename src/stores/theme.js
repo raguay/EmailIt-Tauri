@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 
 let defaultTheme = {
+  name: "default",
   font: "Fira Code, Menlo",
   fontSize: "16pt",
   textAreaColor: '#454158',
