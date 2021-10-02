@@ -6,6 +6,12 @@
       style="background-color: {$theme.textAreaColor}; color: {$theme.textColor};"
       bind:value={style}
     >
+    <button 
+      style="background-color: {$theme.textAreaColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize};"
+      on:click={saveNewTheme}
+    >
+      Save New
+    </button>
   {:else}
     <select
       class="prefSelector" 
@@ -20,6 +26,12 @@
       {/if}
       <option value='New'>New</option>
     </select>
+    <button 
+      style="background-color: {$theme.textAreaColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize};"
+      on:click={updateTheme}
+    >
+      Update Theme
+    </button>
   {/if}
 </div>
 <h3>Circle Colors</h3>
@@ -215,6 +227,17 @@
     grid-column-gap: 10px;
     grid-row-gap: 20px;
     margin-left: 10px;
+  }
+  
+  button {
+    border-radius: 10px;
+    border-color: transparent;
+    outline: none;
+    margin: 0px 10px;
+    padding: 5px 10px 5px 10px;
+    user-select: none;
+    outline-style:none;
+    cursor: pointer;
   }
 
   .prefInput {
@@ -458,5 +481,13 @@
       pickerType = 'Circle';
       explanation = `#${colorID} Circle`;
     }
+  }
+
+  function saveNewTheme() {
+    
+  }
+
+  function updateTheme() {
+    
   }
 </script>
