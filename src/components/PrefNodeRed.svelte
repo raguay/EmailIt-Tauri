@@ -38,10 +38,12 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
-  export let styles = {};
-  export let preferences = {};
-
   const dispatch = createEventDispatcher();
+
+  var preferences = {
+    REDAuto: true,
+    REDDashboard: true
+  }
 
   function fire(name, data) {
     dispatch(name, {

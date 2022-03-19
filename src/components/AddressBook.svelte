@@ -1,6 +1,6 @@
 <div
   id="addressBook"
-  style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize}; border-color: {$theme.textAreaColor};"
+  style="background-color: {$theme.backgroundColor}; font-family: {$theme.font}; color: {$theme.textColor}; font-size: {$theme.fontSize}; border-color: {$theme.borderColor};"
 >
   <div
     id='tablediv'

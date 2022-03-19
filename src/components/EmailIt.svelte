@@ -5,7 +5,7 @@
   {#if showNewAccount}
     <div
       id="newAccountDialog"
-      style="background-color: {$theme.backgroundColor}; color: {$theme.textColor};"
+      style="background-color: {$theme.backgroundColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     >
       <label 
         for="accountDefaultInput"
@@ -141,7 +141,7 @@
   {#if showChangeAccount}
     <div
       id="accountsDiv"
-      style="background-color: {$theme.backgroundColor}; color: {$theme.textColor};"
+      style="background-color: {$theme.backgroundColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
     >
       <h1>Email It - Change Account</h1>
       {#if $account !== undefined}
@@ -149,14 +149,18 @@
       {:else}
         <h2>Current Account: Please Create an Account</h2>
       {/if}
-      {#each accounts as acc}
-        <button
-          on:click={() => { changeActiveAccount(acc); }}
-          style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
-        >
-          {acc.name}
-        </button>
-      {/each}
+      <div 
+        id="AccountsList"
+      >
+        {#each accounts as acc}
+          <button
+            on:click={() => { changeActiveAccount(acc); }}
+            style="background-color: {$theme.textAreaColor}; color: {$theme.textColor}; border-color: {$theme.borderColor};"
+          >
+            {acc.name}
+          </button>
+        {/each}
+      </div>
       <div
         id='buttonrow'
       >
@@ -468,6 +472,7 @@
     position: absolute;
     width: 80%;
     padding: 20px;
+    border: solid 3px;
     border-radius: 10px;
     top: 10%;
     left: 10%;
@@ -477,6 +482,15 @@
   #accountsDiv button {
     border-radius: 20px;
     cursor: pointer;
+  }
+
+  #AccountsList {
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    width: 100%;
+    margin: 10px;
+    overflow-y: auto;
   }
 
   #newAccountDialog {
@@ -581,7 +595,11 @@
   }
 
   h1 {
-    margin: 20px auto;
+    margin: 10px auto;
+  }
+
+  h2 {
+    margin: 10px;
   }
 
   textarea {

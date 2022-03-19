@@ -37,6 +37,7 @@
   import { createEventDispatcher, onMount, tick  } from 'svelte';
   import EnvList from './EnvList.svelte';
   import Env from './Env.svelte';
+  import { theme } from '../stores/theme.js';
   
   const dispatch = createEventDispatcher();
   
